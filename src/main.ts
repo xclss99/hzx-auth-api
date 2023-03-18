@@ -8,4 +8,5 @@ const start = async () => {
   })
   await app.listen(3000)
 }
+
 start()

@@ -9,7 +9,7 @@ import { AdminType } from '@/modules/admin/enum'
 import { DetailedBaseEntity } from '~/entities'
 
 @Entity('admin')
-export class Admin extends DetailedBaseEntity {
+export class AdminEntity extends DetailedBaseEntity {
   /** 管理员类型, Super: 0, 超级管理员; Admin: 1 普通管理员 */
   @Column({
     type: 'tinyint',

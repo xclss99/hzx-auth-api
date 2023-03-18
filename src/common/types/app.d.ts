@@ -1,7 +1,7 @@
 declare namespace App {
   type DatabaseType = 'mysql' | 'mariadb'
   interface ServiceConfigs {
-    port: 3000
+    port: number
   }
   interface DatabaseConfigs {
     type: DatabaseType
@@ -10,8 +10,8 @@ declare namespace App {
     username: string
     password: string
     database: string
-    autoLoadEntities: boolean
     synchronize: boolean
+    autoLoadEntities: boolean
   }
   interface Configs {
     service: ServiceConfigs

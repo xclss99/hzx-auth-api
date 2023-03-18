@@ -28,7 +28,7 @@ export abstract class DetailedBaseEntity {
   createTime: Date
 
   /** 更新次数 */
-  @VersionColumn({ select: false, comment: '更新次数' })
+  @VersionColumn({ select: false, default: 0, comment: '更新次数' })
   version: number
 
   /** 软删除 */
