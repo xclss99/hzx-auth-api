@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { AdminEntity } from './entities/admin.entity'
+import { AdminNotFoundIdException } from './admin.exception'
 
 @Injectable()
 export class AdminService {
@@ -14,8 +15,7 @@ export class AdminService {
     return await this.adminRepository.find()
   }
 
-  async create(createAdminDto: CreateAdminDto) {
-    const { adminType, mobile, username, password, creatorId } = createAdminDto
+  async create({ adminType, mobile, username, password, creatorId }: CreateAdminDto) {
     const adminEntity = this.adminRepository.create({
       adminType,
       mobile,
@@ -25,5 +25,17 @@ export class AdminService {
       updaterId: creatorId
     })
     return adminEntity.id
+  }
+
+  async update({ adminId, adminType, mobile, username, updaterId }: UpdateAdminDto) {
+    const adminEntity = await this.adminRepository.findOneBy({ id: adminId })
+    if (!adminEntity) {
+      throw new AdminNotFoundIdException()
+    }
+    adminEntity.adminType = adminType
+    adminEntity.mobile = mobile
+    adminEntity.username = username
+    adminEntity.updaterId = updaterId
+    this.adminRepository.save([adminEntity])
   }
 }

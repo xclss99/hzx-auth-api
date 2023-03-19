@@ -4,3 +4,8 @@ export enum AdminType {
   /** 普通管理员: 1 */
   Admin
 }
+
+export enum AdminExceptionCode {
+  ADMIN_NOT_FOUND_ID = 10001,
+  ADMIN_NOT_FOUND_MOBILE = 10002
+}

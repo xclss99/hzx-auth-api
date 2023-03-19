@@ -14,4 +14,6 @@ export class AdminController {
       message: 'find all admin successfully!'
     }
   }
+
+  
 }
