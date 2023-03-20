@@ -6,6 +6,6 @@ export enum AdminType {
 }
 
 export enum AdminExceptionCode {
-  ADMIN_NOT_FOUND_ID = 10001,
-  ADMIN_NOT_FOUND_MOBILE = 10002
+  ADMIN_NOT_FOUND = 10001,
+  ADMIN_ALREADY_EXISTS = 10002
 }

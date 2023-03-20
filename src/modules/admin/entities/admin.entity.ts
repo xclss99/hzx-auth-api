@@ -1,10 +1,5 @@
 import { Entity, Column, Unique } from 'typeorm'
-import {
-  Length,
-  IsNotEmpty,
-  IsMobilePhone,
-  IsStrongPassword
-} from 'class-validator'
+import { Length, IsNotEmpty, IsMobilePhone, IsStrongPassword } from 'class-validator'
 import { AdminType } from '@/modules/admin/enum'
 import { DetailedBaseEntity } from '~/entities'
 

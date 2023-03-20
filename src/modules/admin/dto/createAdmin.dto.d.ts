@@ -4,4 +4,5 @@ interface CreateAdminDto {
   username: string
   password: string
   creatorId: number
+  updaterId: number
 }
