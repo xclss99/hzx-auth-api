@@ -24,7 +24,7 @@ export class AdminEntity extends DetailedBaseEntity {
   /** 用户名, 唯一值, 长度8 ~ 16位, 用作账号 */
   @Column({ comment: '用户名, 唯一值, 长度8 ~ 16位, 用作账号' })
   @IsNotEmpty()
-  @Length(1, 16)
+  @Length(2, 16)
   @Unique(['username'])
   username: string
 
@@ -35,8 +35,7 @@ export class AdminEntity extends DetailedBaseEntity {
   @IsStrongPassword({
     minLength: 8,
     minNumbers: 1,
-    minLowercase: 1,
-    minUppercase: 1
+    minLowercase: 1
   })
   password: string
 }

@@ -1,10 +1,4 @@
-import {
-  Column,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  CreateDateColumn,
-  VersionColumn
-} from 'typeorm'
+import { Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, VersionColumn } from 'typeorm'
 
 export abstract class DetailedBaseEntity {
   /** 自增主键 */
