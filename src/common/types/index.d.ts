@@ -1,1 +1,1 @@
-type IdentifyField = 'id' | 'mobile' | 'username'
+type KeyField = 'id' | 'mobile' | 'username'

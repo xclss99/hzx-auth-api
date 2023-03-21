@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Like, Repository } from 'typeorm'
 import { AdminEntity } from './entities/admin.entity'
+import { Like, Repository } from 'typeorm'
 import {
   EntityNotFoundException,
   EntityAlreadyExistsException,
@@ -9,7 +9,7 @@ import {
   InvalidUsernameException,
   InvalidPasswordException
 } from '~/exceptions'
-import { isMobilePhone, isStrongPassword, length } from 'class-validator'
+import { isMobileCN, isUsername, isPassword } from '~/utils'
 
 @Injectable()
 export class AdminService {
@@ -18,7 +18,7 @@ export class AdminService {
     private readonly adminRepository: Repository<AdminEntity>
   ) {}
 
-  private async findAdminEntity(field: IdentifyField, value: string) {
+  private async findAdminEntity(field: KeyField, value: string) {
     let adminEntities: AdminEntity[]
     const like = Like(`%${value}%`)
     switch (field) {
@@ -41,7 +41,7 @@ export class AdminService {
 
   async findAll() {
     const adminEntities = await this.adminRepository.find()
-    const adminInfoList: AdminInfoDto[] = adminEntities.map((item) => {
+    const adminInfoList: AdminInfoBo[] = adminEntities.map((item) => {
       const { id, adminType, mobile, username, updaterId, creatorId, updateTime, createTime } = item
       return {
         id,
@@ -71,14 +71,14 @@ export class AdminService {
 
   async create(createAdminDto: CreateAdminDto) {
     const { mobile, username, password } = createAdminDto
-    // check format
-    if (!isMobilePhone(mobile, 'zh-CN')) {
+    // check mobile and username format
+    if (!isMobileCN(mobile)) {
       throw new InvalidMobileException(mobile)
     }
-    if (!length(username, 2, 16)) {
+    if (!isUsername(username)) {
       throw new InvalidUsernameException(username)
     }
-    // check exists
+    // check mobile and username exists
     const adminByMobile = await this.adminRepository.findOneBy({ mobile })
     const adminByUsername = await this.adminRepository.findOneBy({ username })
     if (adminByMobile) {
@@ -88,22 +88,37 @@ export class AdminService {
       throw new EntityAlreadyExistsException('Admin', 'username', username)
     }
     // check password format
-    if (
-      !isStrongPassword(password.toLocaleLowerCase(), { minLength: 8, minNumbers: 1, minLowercase: 1 }) ||
-      !(password.length <= 16)
-    ) {
+    if (!isPassword(password)) {
       throw new InvalidPasswordException()
     }
+    // check admin exists with creatorId
+    const { creatorId } = createAdminDto
+    const creator = await this.adminRepository.findOneBy({ id: creatorId })
+    if (!creator) {
+      throw new EntityNotFoundException('Creator of Admin', 'id', String(creatorId))
+    }
     // create new admin
-    createAdminDto.updaterId = createAdminDto.creatorId
+    createAdminDto.updaterId = creatorId
     const adminEntity = await this.adminRepository.save(createAdminDto)
     return adminEntity.id
   }
 
   async update({ id, adminType, mobile, username, updaterId }: UpdateAdminDto) {
+    // check admin exists with id and updaterId
     const adminEntity = await this.adminRepository.findOneBy({ id })
     if (!adminEntity) {
       throw new EntityNotFoundException('Admin', 'id', String(id))
+    }
+    const updater = await this.adminRepository.findOneBy({ id: updaterId })
+    if (!updater) {
+      throw new EntityNotFoundException('Updater of Admin', 'id', String(id))
+    }
+    // check mobile and username format
+    if (!isMobileCN(mobile)) {
+      throw new InvalidMobileException(mobile)
+    }
+    if (!isUsername(username)) {
+      throw new InvalidUsernameException(username)
     }
     adminEntity.adminType = adminType
     adminEntity.mobile = mobile

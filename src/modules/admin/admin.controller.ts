@@ -10,7 +10,7 @@ export class AdminController {
   async findAll() {
     const data = await this.adminService.findAll()
     const len = data.length
-    const res: Http.ResponseBody<AdminInfoDto[]> = {
+    const res: Http.ResponseBody<AdminInfoBo[]> = {
       data,
       message: `Found ${len} admin${len > 1 ? 's' : ''}.`
     }

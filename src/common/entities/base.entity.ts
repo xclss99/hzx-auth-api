@@ -1,13 +1,15 @@
 import { Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn } from 'typeorm'
 
 export abstract class BaseEntity {
-  /** 自增主键 */
-  @PrimaryGeneratedColumn({ comment: '自增主键' })
+  /** 自增id */
+  @PrimaryGeneratedColumn({ comment: '自增id' })
   id: number
 
+  /** 更新时间 */
   @UpdateDateColumn({ comment: '更新时间' })
   updateTime: Date
 
+  /** 创建时间 */
   @CreateDateColumn({ comment: '创建时间' })
   createTime: Date
 
